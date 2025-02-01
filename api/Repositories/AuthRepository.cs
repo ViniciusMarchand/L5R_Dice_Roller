@@ -16,32 +16,12 @@ public class AuthRepository(ApplicationDbContext context, ITokenGeneratorService
     public async Task<User> Login(UserLoginDTO dto) 
     {
         var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == dto.Username) ?? throw new KeyNotFoundException("Usuário não encontrado ou senha inválida");
-
-        if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.Password))
-        {
-            throw new KeyNotFoundException("Usuário não encontrado ou senha inválida");
-        }
-
+        
         return user;
     }
 
-    public async Task<User> Register(UserDTO dto)
+    public async Task<User> Register(User user)
     {
-        
-        var Password = BCrypt.Net.BCrypt.HashPassword(dto.Password);
-        var emailRegex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
-        if (!emailRegex.IsMatch(dto.Email))
-            throw new Exception("Invalid email");
-        
-        var user = new User
-        {
-            Username = dto.Username,
-            Password = Password,
-            FirstName = dto.FirstName,
-            LastName = dto.LastName,
-            Email = dto.Email
-        };
-        
         try
         {
             _context.Users.Add(user);
@@ -49,7 +29,6 @@ public class AuthRepository(ApplicationDbContext context, ITokenGeneratorService
             await _context.SaveChangesAsync();
 
             return user;
-
         } 
         catch (DbUpdateException e)
         {
