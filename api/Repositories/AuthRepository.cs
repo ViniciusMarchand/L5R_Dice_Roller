@@ -1,19 +1,19 @@
 using System.Text.RegularExpressions;
-using api.Repositories;
 using api.Models;
 using api.Services;
-using BCrypt.Net;
 using Microsoft.EntityFrameworkCore;
 using api.DTO;
+using api.Repositories.Interfaces;
+using api.Services.Domain.Interfaces;
 
 namespace api.Repositories;
 
-public class AuthRepository(ApplicationDbContext context, TokenGeneratorService tokenGenerator)
+public class AuthRepository(ApplicationDbContext context, ITokenGeneratorService tokenGenerator) : IAuthRepository
 {
     readonly ApplicationDbContext _context = context;
-    readonly TokenGeneratorService _tokenGenerator = tokenGenerator;
+    readonly ITokenGeneratorService _tokenGenerator = tokenGenerator;
 
-    public async Task<AccessTokenDTO> Login(UserLoginDTO dto) 
+    public async Task<User> Login(UserLoginDTO dto) 
     {
         var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == dto.Username) ?? throw new KeyNotFoundException("Usuário não encontrado ou senha inválida");
 
@@ -22,12 +22,7 @@ public class AuthRepository(ApplicationDbContext context, TokenGeneratorService 
             throw new KeyNotFoundException("Usuário não encontrado ou senha inválida");
         }
 
-        AccessTokenDTO token = new()
-        {
-            AccessToken = _tokenGenerator.GenerateToken(user)
-        };
-
-        return token;
+        return user;
     }
 
     public async Task<User> Register(UserDTO dto)

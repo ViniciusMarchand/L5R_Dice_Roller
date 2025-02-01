@@ -3,21 +3,23 @@ using Microsoft.AspNetCore.Mvc;
 using api.Services;
 using api.DTO;
 using api.Repositories;
+using api.Services.Application.Interfaces;
 
 namespace api.Controllers
 {
     [Route("api/auth")]
     [ApiController]
-    public class AuthController(AuthRepository authRepository) : ControllerBase
+    public class AuthController(IAuthService authService) : ControllerBase
     {
-        readonly AuthRepository _authRepository = authRepository;
+
+        readonly IAuthService _authService = authService;
 
         [HttpPost("login")]
         public async Task<ActionResult<AccessTokenDTO>> Login(UserLoginDTO dto)
         {
             try
             {
-                AccessTokenDTO token = await _authRepository.Login(dto);
+                AccessTokenDTO token = await _authService.Login(dto);
                 return Ok(token);
             }
             catch (KeyNotFoundException e)
@@ -32,7 +34,7 @@ namespace api.Controllers
         {
             try
             {
-                var user = await _authRepository.Register(dto);
+                var user = await _authService.Register(dto);
                 return Ok(user);
             }
             catch (Exception e)

@@ -1,4 +1,5 @@
 using System.Text;
+using api.Extensions;
 using api.Models;
 using api.Repositories;
 using api.Services;
@@ -66,8 +67,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-builder.Services.AddScoped<AuthRepository>();
-builder.Services.AddScoped<TokenGeneratorService>();
+builder.Services.AddApplicationServices();
 
 builder.Services.AddControllersWithViews()
     .AddNewtonsoftJson();
