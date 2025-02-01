@@ -19,6 +19,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ISessionRepository, SessionRepository>();
         services.AddScoped<ISessionService, SessionService>();
+        services.AddScoped<IPlayerSessionRepository, PlayerSessionRepository>();
 
         return services;
     }

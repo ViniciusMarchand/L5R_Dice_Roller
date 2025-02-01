@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace api.Migrations
 {
     /// <inheritdoc />
-    public partial class add_uuid : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -225,6 +225,32 @@ namespace api.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "PlayerSessions",
+                columns: table => new
+                {
+                    SessionId = table.Column<Guid>(type: "uuid", nullable: false),
+                    PlayerId = table.Column<Guid>(type: "uuid", nullable: false),
+                    JoinDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Role = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PlayerSessions", x => new { x.SessionId, x.PlayerId });
+                    table.ForeignKey(
+                        name: "FK_PlayerSessions_Sessions_SessionId",
+                        column: x => x.SessionId,
+                        principalTable: "Sessions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PlayerSessions_Users_PlayerId",
+                        column: x => x.PlayerId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Dices",
                 columns: table => new
                 {
@@ -298,6 +324,11 @@ namespace api.Migrations
                 column: "DiceRollId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PlayerSessions_PlayerId",
+                table: "PlayerSessions",
+                column: "PlayerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Sessions_OwnerId",
                 table: "Sessions",
                 column: "OwnerId");
@@ -335,6 +366,9 @@ namespace api.Migrations
 
             migrationBuilder.DropTable(
                 name: "Dices");
+
+            migrationBuilder.DropTable(
+                name: "PlayerSessions");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

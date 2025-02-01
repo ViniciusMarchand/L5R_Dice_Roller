@@ -13,5 +13,9 @@ public class Session
     public User Owner { get; set; } = null!;
 
     public List<DiceRoll> DiceRolls { get; set; } = [];
+
+    [JsonIgnore]
+    public List<PlayerSession> PlayersSessions { get; set; } = [];
+    
     public bool IsDeleted { get; set; } = false;
 }

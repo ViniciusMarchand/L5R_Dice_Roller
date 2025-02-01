@@ -273,6 +273,27 @@ namespace api.Migrations
                     b.ToTable("DiceRolls");
                 });
 
+            modelBuilder.Entity("api.Models.PlayerSession", b =>
+                {
+                    b.Property<Guid>("SessionId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("PlayerId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("JoinDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("integer");
+
+                    b.HasKey("SessionId", "PlayerId");
+
+                    b.HasIndex("PlayerId");
+
+                    b.ToTable("PlayerSessions");
+                });
+
             modelBuilder.Entity("api.Models.Session", b =>
                 {
                     b.Property<Guid>("Id")
@@ -425,6 +446,25 @@ namespace api.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("api.Models.PlayerSession", b =>
+                {
+                    b.HasOne("api.Models.User", "Player")
+                        .WithMany("Sessions")
+                        .HasForeignKey("PlayerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("api.Models.Session", "Session")
+                        .WithMany("PlayersSessions")
+                        .HasForeignKey("SessionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Player");
+
+                    b.Navigation("Session");
+                });
+
             modelBuilder.Entity("api.Models.Session", b =>
                 {
                     b.HasOne("api.Models.User", "Owner")
@@ -444,6 +484,13 @@ namespace api.Migrations
             modelBuilder.Entity("api.Models.Session", b =>
                 {
                     b.Navigation("DiceRolls");
+
+                    b.Navigation("PlayersSessions");
+                });
+
+            modelBuilder.Entity("api.Models.User", b =>
+                {
+                    b.Navigation("Sessions");
                 });
 #pragma warning restore 612, 618
         }

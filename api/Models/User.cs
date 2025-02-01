@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
 namespace api.Models
@@ -14,6 +15,9 @@ namespace api.Models
         public string LastName { get; set; } = string.Empty;
         public string NickName { get; set; } = string.Empty;
         public bool IsDeleted { get; set; } = false;
+
+        [JsonIgnore]
+        public List<PlayerSession> Sessions { get; set; } = [];
 
     }
 }

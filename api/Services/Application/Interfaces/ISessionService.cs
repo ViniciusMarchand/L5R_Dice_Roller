@@ -10,4 +10,5 @@ public interface ISessionService
     Task<Session> CreateSession(SessionDTO session);
     Task<Session> UpdateSession(SessionDTO session);
     Task<Session> DeleteSession(Guid id);
+    Task<bool> AddPlayer(Guid sessionId, Guid playerId);
 }

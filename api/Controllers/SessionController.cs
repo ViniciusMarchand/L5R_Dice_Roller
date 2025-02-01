@@ -39,5 +39,14 @@ namespace api.Controllers
             
             return Ok(sessions);
         }
+
+        [HttpGet("add-player/session/{sessionId}/player/{playerId}")]
+        [Authorize]
+        public async Task<ActionResult<bool>> AddPlayerToSession(Guid sessionId, Guid playerId)
+        {
+            var sessions = await _sessionService.AddPlayer(sessionId, playerId);
+            
+            return Ok(sessions);
+        }
     }
 }
