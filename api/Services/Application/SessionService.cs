@@ -1,4 +1,5 @@
 using api.DTO;
+using api.Enums;
 using api.Models;
 using api.Repositories.Interfaces;
 using api.Services.Application.Interfaces;
@@ -17,15 +18,15 @@ public class SessionService(ISessionRepository sessionRepository, IUserRepositor
         return await _sessionRepository.GetSessions();
     }
 
-    public async Task<Session> CreateSession(SessionDTO sessionDto)
+    public async Task<SessionResponseDTO> CreateSession(SessionDTO sessionDto, Guid userId)
     {
-        User user = await _userRepository.GetUser(sessionDto.OwnerId);
+        User user = await _userRepository.GetUser(userId);
 
         Session session = new ()
         {
             Title = sessionDto.Title,
             Description = sessionDto.Description,
-            OwnerId = sessionDto.OwnerId,
+            OwnerId = userId,
             Owner = user
         };
 
@@ -34,14 +35,25 @@ public class SessionService(ISessionRepository sessionRepository, IUserRepositor
         PlayerSession playerSession = new()
         {
             SessionId = session.Id,
-            Session = session,
-            PlayerId = sessionDto.OwnerId,
-            Player = user
+            // Session = session,
+            PlayerId = userId,
+            // Player = user
+            Role = SessionRoles.GAME_MASTER
         };
 
         await _playerSessionRepository.AddPlayer(playerSession);
         
-        return session;
+        SessionResponseDTO sessionResponse = new()
+        {
+            Id = session.Id,
+            Title = session.Title,
+            Description = session.Description,
+            OwnerId = session.OwnerId,
+            OwnerName = user.FirstName,
+            OwnerLastName = user.LastName
+        };
+        
+        return sessionResponse;
     }
 
     public Task<Session> DeleteSession(Guid id)

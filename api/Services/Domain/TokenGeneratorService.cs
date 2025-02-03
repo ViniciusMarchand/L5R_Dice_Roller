@@ -21,7 +21,7 @@ public class TokenGeneratorService(IConfiguration configuration) : ITokenGenerat
             {
         new (ClaimTypes.NameIdentifier, user.Id.ToString()),
         }),
-            Expires = DateTime.UtcNow.AddHours(1),
+            Expires = DateTime.UtcNow.AddDays(7),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
             Issuer = _configuration["Jwt:Issuer"], // Add this line
             Audience = _configuration["Jwt:Audience"]

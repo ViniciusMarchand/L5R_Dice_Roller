@@ -203,16 +203,15 @@ namespace api.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     DateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    SessionId = table.Column<int>(type: "integer", nullable: false),
-                    SessionId1 = table.Column<Guid>(type: "uuid", nullable: false),
+                    SessionId = table.Column<Guid>(type: "uuid", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_DiceRolls", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_DiceRolls_Sessions_SessionId1",
-                        column: x => x.SessionId1,
+                        name: "FK_DiceRolls_Sessions_SessionId",
+                        column: x => x.SessionId,
                         principalTable: "Sessions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -309,9 +308,9 @@ namespace api.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_DiceRolls_SessionId1",
+                name: "IX_DiceRolls_SessionId",
                 table: "DiceRolls",
-                column: "SessionId1");
+                column: "SessionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DiceRolls_UserId",

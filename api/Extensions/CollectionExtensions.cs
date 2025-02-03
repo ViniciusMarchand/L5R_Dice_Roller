@@ -20,6 +20,10 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ISessionRepository, SessionRepository>();
         services.AddScoped<ISessionService, SessionService>();
         services.AddScoped<IPlayerSessionRepository, PlayerSessionRepository>();
+        services.AddScoped<IDiceRollRepository, DiceRollRepository>();
+        services.AddScoped<IRandomNumberGenerator, RandomNumberGenerator>();
+        services.AddScoped<IDiceRepository, DiceRepository>();
+        services.AddScoped<IDiceRollService, DiceRollService>();
 
         return services;
     }

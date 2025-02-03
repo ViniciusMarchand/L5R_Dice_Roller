@@ -7,7 +7,7 @@ public interface ISessionService
 {
     Task<IEnumerable<Session>> GetSessions();
     Task<Session> GetSession(Guid id);
-    Task<Session> CreateSession(SessionDTO session);
+    Task<SessionResponseDTO> CreateSession(SessionDTO session, Guid userId);
     Task<Session> UpdateSession(SessionDTO session);
     Task<Session> DeleteSession(Guid id);
     Task<bool> AddPlayer(Guid sessionId, Guid playerId);

@@ -12,7 +12,7 @@ using api.Services;
 namespace api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250201215445_init")]
+    [Migration("20250202031602_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -258,10 +258,7 @@ namespace api.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
-                    b.Property<int>("SessionId")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid>("SessionId1")
+                    b.Property<Guid>("SessionId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("UserId")
@@ -269,7 +266,7 @@ namespace api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SessionId1");
+                    b.HasIndex("SessionId");
 
                     b.HasIndex("UserId");
 
@@ -434,7 +431,7 @@ namespace api.Migrations
                 {
                     b.HasOne("api.Models.Session", "Session")
                         .WithMany("DiceRolls")
-                        .HasForeignKey("SessionId1")
+                        .HasForeignKey("SessionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

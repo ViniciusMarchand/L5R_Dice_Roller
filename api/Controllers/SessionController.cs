@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using api.Services.Application.Interfaces;
 using Microsoft.AspNetCore.Http.HttpResults;
 using api.DTO;
+using System.Security.Claims;
 
 namespace api.Controllers
 {
@@ -33,9 +34,18 @@ namespace api.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<Session>> CreateSession([FromBody] SessionDTO session)
+        public async Task<ActionResult<SessionResponseDTO>> CreateSession([FromBody] SessionDTO session)
         {
-            var sessions = await _sessionService.CreateSession(session);
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+
+            if (userIdClaim == null)
+            {
+                return Unauthorized("User ID claim not found.");
+            }
+            
+            Guid userId = Guid.Parse(userIdClaim.Value);
+
+            var sessions = await _sessionService.CreateSession(session, userId);
             
             return Ok(sessions);
         }

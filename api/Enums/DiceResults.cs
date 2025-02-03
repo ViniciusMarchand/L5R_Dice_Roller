@@ -1,0 +1,13 @@
+namespace api.Enums;
+
+public enum DiceResult
+{
+    BLANK,
+    OPPORTUNITY_STRIFE,
+    OPPORTUNITY,
+    SUCCESS_STRIFE,
+    SUCCESS,
+    EXPLOSIVE_SUCCESS_STRIFE,
+    SUCCESS_OPPORTUNITY,
+    EXPLOSIVE_SUCCESS,
+}
